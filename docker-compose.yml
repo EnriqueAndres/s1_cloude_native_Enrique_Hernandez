@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  spring-app:
+    build: .
+    container_name: mi-app-spring
+    ports:
+      - "8080:8080"
+    environment:
+      - OS_DB_URL=jdbc:mysql://host.docker.internal:3306/eventos_db
+      - OS_DB_USERNAME=root
+      - OS_DB_PASSWORD=admin123
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
