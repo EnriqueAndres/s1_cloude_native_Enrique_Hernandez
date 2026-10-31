@@ -1,5 +1,7 @@
 package com.Duoc.semanaUno.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,18 +31,41 @@ public class EntradaController {
         this.entradaServicio = entradaServicio;
     }
 
-    //GET
+    //GET listar todos los eventos disponibles
+    @GetMapping("")
+    public ResponseEntity<List<Entrada>> listarEntradas(){
+        return ResponseEntity.ok(entradaServicio.listarEntradas());
+    }
+
+    //GET por ID
     @GetMapping("/{id}")
     public ResponseEntity<Entrada> getIdEntrada(@PathVariable Long id){
         return entradaServicio.buscarIdEntrada(id)
             .map(entrada -> ResponseEntity.ok(entrada)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //POST
+    //POST crear evento
     @PostMapping("")
     public ResponseEntity<Entrada> saveNuevaEntrada(@RequestBody @Valid Entrada entrada){
         Entrada nuevaEntrada = entradaServicio.guardarEntrada(entrada);
         return new ResponseEntity<>(nuevaEntrada, HttpStatus.CREATED);
+    }
+
+    //POST comprar entradas
+    @PostMapping("/comprar")
+    public ResponseEntity<Compra> comprarEntradas(@RequestBody @Valid CompraRequest request){
+        try {
+            Compra resumenCompra = entradaServicio.comprarEntradas(request);
+            return new ResponseEntity<>(resumenCompra, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //GET listar todas las compras realizadas
+    @GetMapping("/compras")
+    public ResponseEntity<List<Compra>> listarCompras(){
+        return ResponseEntity.ok(entradaServicio.listarCompras());
     }
 
     // PUT
