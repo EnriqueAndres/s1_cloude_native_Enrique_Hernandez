@@ -65,5 +65,9 @@ jobs:
               -e OS_DB_URL="${{ secrets.PROD_DB_URL }}" \
               -e OS_DB_USERNAME="${{ secrets.PROD_DB_USERNAME }}" \
               -e OS_DB_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
+              -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+              -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+              -e AWS_SESSION_TOKEN="${{ secrets.AWS_SESSION_TOKEN }}" \
+              -e AWS_REGION="us-east-1" \
               ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
           EOF

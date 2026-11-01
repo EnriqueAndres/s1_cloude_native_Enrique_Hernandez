@@ -6,9 +6,13 @@ services:
     container_name: mi-app-spring
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       - OS_DB_URL=jdbc:mysql://host.docker.internal:3306/eventos_db
       - OS_DB_USERNAME=root
       - OS_DB_PASSWORD=admin123
+    volumes:
+      - ./resumenes:/resumenes
     extra_hosts:
       - "host.docker.internal:host-gateway"

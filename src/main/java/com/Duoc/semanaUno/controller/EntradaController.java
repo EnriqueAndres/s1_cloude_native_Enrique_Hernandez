@@ -9,7 +9,9 @@ import com.Duoc.semanaUno.service.EntradaServicio;
 
 import jakarta.validation.Valid;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,6 +68,21 @@ public class EntradaController {
     @GetMapping("/compras")
     public ResponseEntity<List<Compra>> listarCompras(){
         return ResponseEntity.ok(entradaServicio.listarCompras());
+    }
+
+    //GET descargar el archivo físico (.txt) del resumen de una compra
+    @GetMapping("/compras/{id}/archivo")
+    public ResponseEntity<byte[]> descargarArchivoResumen(@PathVariable Long id){
+        try {
+            byte[] contenido = entradaServicio.obtenerBytesResumen(id);
+            String nombreArchivo = "resumen_compra_" + id + ".txt";
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body(contenido);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // PUT
