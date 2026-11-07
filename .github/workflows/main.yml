@@ -62,6 +62,7 @@ jobs:
             # Iniciar el contenedor
             docker run -d --name my-app \
               -p 8080:8080 \
+              -v /home/ec2-user/efs:/app/efs \
               -e OS_DB_URL="${{ secrets.PROD_DB_URL }}" \
               -e OS_DB_USERNAME="${{ secrets.PROD_DB_USERNAME }}" \
               -e OS_DB_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
