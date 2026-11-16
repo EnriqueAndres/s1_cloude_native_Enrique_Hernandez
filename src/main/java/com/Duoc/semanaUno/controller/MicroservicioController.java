@@ -8,7 +8,6 @@ import java.util.Map;
 @RequestMapping ("/microservicio")
 public class MicroservicioController {
 
-
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Map<String, String> body) {
 
