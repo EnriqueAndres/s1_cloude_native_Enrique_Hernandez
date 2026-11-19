@@ -66,7 +66,7 @@ public class AwsS3Controller {
             String nombreArchivo = (fileName != null && !fileName.isBlank())
                     ? fileName
                     : file.getOriginalFilename();
-            String key = numeroResumen + "/" + nombreArchivo;
+            String key = awsS3Service.resolveResumenKey(bucket, numeroResumen, nombreArchivo);
             efsService.saveToEfs(key, file);
             awsS3Service.upload(bucket, key, file);
             return ResponseEntity.ok().build();
@@ -84,10 +84,11 @@ public class AwsS3Controller {
         String nombreArchivo = (fileName != null && !fileName.isBlank())
                 ? fileName
                 : "resumen_compra_" + numeroResumen + ".txt";
-        String key = numeroResumen + "/" + nombreArchivo;
+        String key = awsS3Service.resolveResumenKey(bucket, numeroResumen, nombreArchivo);
+        String downloadFileName = key.contains("/") ? key.substring(key.lastIndexOf('/') + 1) : key;
         byte[] fileBytes = awsS3Service.downloadAsBytes(bucket, key);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + downloadFileName + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(fileBytes);
     }
@@ -100,7 +101,7 @@ public class AwsS3Controller {
         String nombreArchivo = (fileName != null && !fileName.isBlank())
                 ? fileName
                 : "resumen_compra_" + numeroResumen + ".txt";
-        String key = numeroResumen + "/" + nombreArchivo;
+        String key = awsS3Service.resolveResumenKey(bucket, numeroResumen, nombreArchivo);
         awsS3Service.deleteObject(bucket, key);
         return ResponseEntity.noContent().build();
     }

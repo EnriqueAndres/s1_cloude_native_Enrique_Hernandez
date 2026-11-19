@@ -73,6 +73,33 @@ public class AwsS3Service {
 	}
 
 	/**
+	 * Busca la clave (key) real de un archivo dentro del bucket sin importar en qué carpeta esté.
+	 * Si no lo encuentra, devuelve la clave por defecto (numeroResumen + "/" + nombreArchivo).
+	 */
+	public String resolveResumenKey(String bucket, Long numeroResumen, String nombreArchivo) {
+		List<S3ObjectDto> objects = listObjects(bucket);
+		String prefixFolder = numeroResumen + "/";
+
+		// 1. Buscar coincidencia exacta con el nombre del archivo en cualquier carpeta (ej: "trabajo/resumen_compra_1.txt" o "resumen_compra_1.txt")
+		for (S3ObjectDto obj : objects) {
+			String k = obj.getKey();
+			if (k != null && (k.equals(nombreArchivo) || k.endsWith("/" + nombreArchivo))) {
+				return k;
+			}
+		}
+
+		// 2. Si no coincide por nombre exacto, buscar cualquier archivo dentro de la carpeta "{numeroResumen}/"
+		for (S3ObjectDto obj : objects) {
+			String k = obj.getKey();
+			if (k != null && k.startsWith(prefixFolder) && !k.equals(prefixFolder)) {
+				return k;
+			}
+		}
+
+		return prefixFolder + nombreArchivo;
+	}
+
+	/**
 	 * Descarga un objeto de S3 como array de bytes
 	 * 
 	 * @param bucket Nombre del bucket
