@@ -37,7 +37,7 @@ public class SecurityConfig {
 
 		jwtAuthConverter.setJwtGrantedAuthoritiesConverter(new RolesClaimConverter());
 
-		http.cors(Customizer.withDefaults())
+		http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/mensaje-admin").hasRole("ADMIN")
 						.requestMatchers("/mensaje").authenticated().anyRequest().hasRole("ADMIN"))
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));
