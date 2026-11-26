@@ -70,8 +70,7 @@ jobs:
               -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
               -e AWS_SESSION_TOKEN="${{ secrets.AWS_SESSION_TOKEN }}" \
               -e AWS_REGION="us-east-1" \
-              -e AZURE_B2C_TENANT_NAME="${{ secrets.AZURE_B2C_TENANT_NAME }}" \
-              -e AZURE_B2C_TENANT_ID="${{ secrets.AZURE_B2C_TENANT_ID }}" \
-              -e AZURE_B2C_POLICY="${{ secrets.AZURE_B2C_POLICY }}" \
+              -e OS_OAUTH2_ISSUER_URI="${{ secrets.OS_OAUTH2_ISSUER_URI }}" \
+              -e OS_OAUTH2_JWK_SET_URI="${{ secrets.OS_OAUTH2_JWK_SET_URI }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
           EOF
